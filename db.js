@@ -1,23 +1,20 @@
-import { MongoClient } from 'mongodb'
+import { MongoClient } from 'mongodb';
 
 let isDbConnected = null;
 
-const CLUSTER_URL = "mongodb+srv://Parvesh1234:parveshtomar873:qFcf4fT2tDcjsNh0@cluster0.5nzjrlc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-const client = new MongoClient(CLUSTER_URL)
+const client = new MongoClient(process.env.MONGO_URI);
 
-// async make a function asynchronous, we can use await
 async function connectToDatabase(dbName) {
-    if (isDbConnected == null) {
+    if (!isDbConnected) {
         try {
-            // await waits for a mongodb connection to finish before moving to the next line in an async function.
             await client.connect();
-            isDbConnected = client.db(dbName)
-            console.log("database connected successfull")
+            isDbConnected = client.db(dbName);
+            console.log("Database connected successfully");
         } catch (e) {
-            console.log(`database connection, error ${e.message}`)
+            console.log("Database connection error:", e.message);
         }
     } else {
-        console.log("database already connected")
+        console.log("Database already connected");
     }
 
     return isDbConnected;
